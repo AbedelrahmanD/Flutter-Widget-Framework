@@ -1,14 +1,12 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_framework/helpers/utils/connecter.dart';
+import 'package:flutter_widget_framework/helpers/utils/connector.dart';
+import 'package:flutter_widget_framework/helpers/widgets/cm_button.dart';
 import 'package:flutter_widget_framework/helpers/widgets/cm_container.dart';
 import 'package:flutter_widget_framework/helpers/widgets/cm_text.dart';
-import 'package:flutter_widget_framework/helpers/widgets/cm_text_field.dart';
 import 'package:get/get.dart';
-
 import 'helpers/widgets/cm_drop_down.dart';
 
 class Home extends StatefulWidget {
@@ -30,17 +28,32 @@ class _HomeState extends State<Home> {
     }
   ];
   TextEditingController controller = TextEditingController();
+  dynamic selectedOption = {};
+  var isLoading = false;
+  var isOpen = false;
+  CmDropDownState d = CmDropDownState();
+
+  searchOnline(value) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    var response = await Connector()
+        .sendRequest(url: "https://jsonplaceholder.typicode.com/todos/$value");
+    if (response != null) {
+      d.updateOptions([response.body]);
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    controller.text = "aa";
+
   }
 
-  dynamic selectedOption = {};
-  var isLoading = false;
-  var isOpen = false;
-  CmDropDownState d= CmDropDownState();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,38 +65,32 @@ class _HomeState extends State<Home> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CmDropDown(
-                openDialog: isOpen,
-                showSpinner: isLoading,
+                hintText: "Dropdown",
+                labelText: "Dropdown",
                 controller: controller,
                 options: products,
                 optionText: "title",
-                // dialog:optionsList(),
-                getInstance: (ob){
-                  d=ob;
+                optionId:"id",
+                selectedOptionId:"2",
+                showSpinner: isLoading,
+                // selectedColor: Colors.red,
+                getInstance: (ob) {
+                  d = ob;
                 },
                 onSelect: (value) {
                   selectedOption = jsonDecode(value);
                 },
-                onSearch: (value)  {
-                  print("searchedddd");
-                  setState((){
-                    products=[{"title":"zzzz","id":50}];
-                  });
-                  print(jsonEncode(products));
+                onSearch: (value) async {
+                  await searchOnline(value);
                 },
-                hintText: "Dropdown",
-                labelText: "Dropdown",
               ),
-              CmTextField(
-                onChanged:(value) async{
-                  var response=await Connector().sendRequest(url: "https://jsonplaceholder.typicode.com/todos");
-                 setState((){
-                   products=response.body;
-                 });
-                },
-                // controller: controller,
-              ),
-
+              CmButton(
+                backgroundColor: Colors.blueAccent,
+                  onPressed: () => d.openDialog(),
+                  child: const CmText(
+                    text: "OPEN DIALOG",
+                    color: Colors.white,
+                  )),
             ],
           ),
         ),

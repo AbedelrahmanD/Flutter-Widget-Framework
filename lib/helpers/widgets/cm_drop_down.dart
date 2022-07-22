@@ -21,7 +21,7 @@ class CmDropDown extends StatefulWidget {
   final Color borderColor;
   final double borderRadius;
   final String? error;
-  TextEditingController? controller;
+  TextEditingController controller;
   IconData? iconData;
   final bool obscureText;
   dynamic filter;
@@ -37,15 +37,19 @@ class CmDropDown extends StatefulWidget {
   IconData? suffixIconData;
   List options;
   String optionText;
-
+  String? selectedOptionId;
+  String optionId;
   bool showSpinner;
+  Color spinnerColor;
+  Color spinnerBackground;
   bool openDialog;
   final void Function(String)? onSearch;
   final void Function(String)? onSelect;
   final void Function(CmDropDownState)? getInstance;
   final FocusNode? focusNode;
   bool autofocus;
-  Widget? dialog;
+  Color selectedColor;
+  String searchText;
 
   CmDropDown(
       {Key? key,
@@ -57,7 +61,7 @@ class CmDropDown extends StatefulWidget {
       this.borderColor = cmTextFieldBorderColor,
       this.borderRadius = cmTextFieldBorderRadius,
       this.error,
-      this.controller,
+      required this.controller,
       this.iconData,
       this.obscureText = false,
       this.filter,
@@ -73,14 +77,19 @@ class CmDropDown extends StatefulWidget {
       this.suffixIconData,
       required this.options,
       required this.optionText,
+      required this.optionId,
+      this.selectedOptionId,
       this.onSelect,
       this.onSearch,
       this.showSpinner = false,
+      this.spinnerColor = Colors.blueAccent,
+      this.spinnerBackground = Colors.white,
       this.openDialog = false,
       this.getInstance,
       this.focusNode,
       this.autofocus = false,
-      this.dialog})
+      this.selectedColor = Colors.blueGrey,
+      this.searchText = "Search..."})
       : super(key: key);
 
   @override
@@ -88,19 +97,25 @@ class CmDropDown extends StatefulWidget {
 }
 
 class CmDropDownState extends State<CmDropDown> {
+  var options = [].obs;
+
+  updateOptions(newOptions) {
+    widget.options = newOptions;
+    options.value = newOptions;
+  }
+
   filterOptions(value) async {
     if (widget.onSearch != null) {
       widget.onSearch!(value);
     }
 
+    options.value = widget.options;
     if (value.trim() == "") {
-      widget.options = widget.options;
       return;
     }
 
     List filteredOptions = [];
-    for (dynamic option in widget.options) {
-      print("${option[widget.optionText]} === ${value.toString()}");
+    for (dynamic option in options) {
       if (option[widget.optionText]
           .toString()
           .toLowerCase()
@@ -109,12 +124,19 @@ class CmDropDownState extends State<CmDropDown> {
       }
     }
 
-    setState((){
-      widget.options = filteredOptions;
-    });
+    options.value = filteredOptions;
   }
 
   onCompleteBuild() async {
+    options.value = widget.options;
+    if (widget.selectedOptionId != null) {
+      for (dynamic option in widget.options) {
+        if (option[widget.optionId].toString() == widget.selectedOptionId.toString()) {
+          widget.controller.text = option[widget.optionText];
+
+        }
+      }
+    }
     await Future.delayed(const Duration(milliseconds: 400));
     widget.getInstance!(this);
     if (widget.openDialog) {
@@ -122,17 +144,9 @@ class CmDropDownState extends State<CmDropDown> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    onCompleteBuild();
-  }
-
-
-
-  searchDialog() {
-
-    return Scaffold(
+  openDialog() {
+    Get.dialog(Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
       body: SafeArea(
         child: CmContainer(
@@ -150,52 +164,59 @@ class CmDropDownState extends State<CmDropDown> {
                             paddingAll: 10,
                             child: CmTextField(
                               autofocus: true,
-                              labelText: "Search...",
+                              labelText: widget.searchText,
                               onChanged: (value) => filterOptions(value),
                             )),
                         CmDirectionality(
-                          child: SingleChildScrollView(
-                            child: CmContainer(
-                              width: Get.width,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  if (widget.showSpinner)
-                                    Center(
-                                      child: CmContainer(
-                                          paddingAll: 5,
-                                          child:
-                                              const CircularProgressIndicator()),
-                                    ),
-                                  if (widget.dialog == null)
-                                    for (dynamic option in widget.options)
-                                      InkWell(
-                                        onTap: () {
-                                          widget.controller?.text =
-                                              option[widget.optionText];
-                                          widget.onSelect!(jsonEncode(option));
-                                          Get.back();
-                                        },
-                                        child: CmContainer(
-                                            width: Get.width,
-                                            paddingAll: 15,
-                                            borderWidthBottom: 1,
-                                            borderColor: Colors.grey,
-                                            color: widget.controller!.text ==
-                                                    option[widget.optionText]
-                                                ? Colors.blueAccent
-                                                    .withOpacity(0.5)
-                                                : Colors.white,
-                                            child: CmText(
-                                                text:
-                                                    option[widget.optionText])),
-                                      ),
-                                  if (widget.dialog != null)
-                                    widget.dialog ?? const SizedBox()
-                                ],
-                              ),
-                            ),
-                          ),
+                          child: Obx(() => CmContainer(
+                                width: Get.width,
+                                height:
+                                    MediaQuery.of(context).viewInsets.bottom ==
+                                            0.0
+                                        ? Get.height * 0.7
+                                        : Get.height * 0.2,
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      if (widget.showSpinner)
+                                        Center(
+                                          child: CmContainer(
+                                              paddingAll: 5,
+                                              child: CircularProgressIndicator(
+                                                color: widget.spinnerColor,
+                                                backgroundColor:
+                                                    widget.spinnerBackground,
+                                              )),
+                                        ),
+                                      for (dynamic option in options)
+                                        InkWell(
+                                          onTap: () {
+                                            widget.controller.text =
+                                                option[widget.optionText];
+                                            widget
+                                                .onSelect!(jsonEncode(option));
+                                            Get.back();
+                                          },
+                                          child: CmContainer(
+                                              width: Get.width,
+                                              paddingAll: 15,
+                                              borderWidthBottom: 1,
+                                              borderColor: Colors.grey,
+                                              color: widget.controller.text ==
+                                                      option[widget.optionText]
+                                                  ? widget.selectedColor
+                                                      .withOpacity(0.5)
+                                                  : Colors.white,
+                                              child: CmText(
+                                                  text: option[
+                                                      widget.optionText])),
+                                        )
+                                    ],
+                                  ),
+                                ),
+                              )),
                         )
                       ],
                     ),
@@ -215,46 +236,43 @@ class CmDropDownState extends State<CmDropDown> {
               ),
             )),
       ),
-    );
+    ));
   }
 
-  openDialog() {
-    Get.dialog(searchDialog());
+  @override
+  void initState() {
+    super.initState();
+    onCompleteBuild();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CmTextField(
-          autofocus: widget.autofocus,
-          enabled: widget.enabled,
-          borderColor: widget.borderColor,
-          borderRadius: widget.borderRadius,
-          width: widget.width,
-          hintText: widget.hintText,
-          hintTextColor: widget.hintTextColor,
-          inputColor: widget.inputColor,
-          marginBottom: widget.marginBottom,
-          marginTop: widget.marginTop,
-          filter: widget.filter,
-          obscureText: widget.obscureText,
-          error: widget.error,
-          key: widget.key,
-          keyboardType: widget.keyboardType,
-          labelTextColor: widget.labelTextColor,
-          maxLines: widget.maxLines,
-          minLines: widget.maxLines,
-          iconData: widget.iconData,
-          onChanged: widget.onSelect,
-          readOnly: true,
-          controller: widget.controller,
-          onTap: () => openDialog(),
-          labelText: "Dropdown",
-          suffixIconData: Icons.arrow_drop_down,
-        ),
-        CmText(text: widget.options.length.toString())
-      ],
+    return CmTextField(
+      autofocus: widget.autofocus,
+      enabled: widget.enabled,
+      borderColor: widget.borderColor,
+      borderRadius: widget.borderRadius,
+      width: widget.width,
+      hintText: widget.hintText,
+      hintTextColor: widget.hintTextColor,
+      inputColor: widget.inputColor,
+      marginBottom: widget.marginBottom,
+      marginTop: widget.marginTop,
+      filter: widget.filter,
+      obscureText: widget.obscureText,
+      error: widget.error,
+      key: widget.key,
+      keyboardType: widget.keyboardType,
+      labelTextColor: widget.labelTextColor,
+      maxLines: widget.maxLines,
+      minLines: widget.maxLines,
+      iconData: widget.iconData,
+      onChanged: widget.onSelect,
+      readOnly: true,
+      controller: widget.controller,
+      onTap: () => openDialog(),
+      labelText: "Dropdown",
+      suffixIconData: Icons.arrow_drop_down,
     );
   }
 }

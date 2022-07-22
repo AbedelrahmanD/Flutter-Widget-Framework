@@ -1,6 +1,7 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
 import '../config.dart';
-
 // ignore: must_be_immutable
 class CmContainer extends StatelessWidget {
   final Widget child;
@@ -34,42 +35,49 @@ class CmContainer extends StatelessWidget {
   final double spreadRadius;
   final double blurRadius;
   final Offset offset;
-
+  final double? maxHeight;
+  final double? minHeight;
+  final double? maxWidth;
+  final double? minWidth;
   final bool isClipHardEdge;
-  CmContainer(
-      {Key? key,
-      required this.child,
-      this.color = Colors.transparent,
-      this.paddingAll = 0,
-      this.paddingStart = 0,
-      this.paddingEnd = 0,
-      this.paddingBottom = 0,
-      this.paddingTop = 0,
-      this.marginAll = 0,
-      this.marginStart = 0,
-      this.marginEnd = 0,
-      this.marginBottom = 0,
-      this.marginTop = 0,
-      this.borderColor = Colors.transparent,
-      this.borderWidthAll = 0,
-      this.borderWidthTop = 0,
-      this.borderWidthBottom = 0,
-      this.borderWidthStart = 0,
-      this.borderWidthEnd = 0,
-      this.borderRadiusAll = 0,
-      this.borderRadiusTopStart = 0,
-      this.borderRadiusTopEnd = 0,
-      this.borderRadiusBottomStart = 0,
-      this.borderRadiusBottomEnd = 0,
-      this.width,
-      this.height,
-      this.boxShadowColor = Colors.transparent,
-      this.spreadRadius = 1,
-      this.blurRadius = 5,
-      this.offset = const Offset(0, 1),
-        this.isClipHardEdge=true,
-      })
-      : super(key: key);
+
+  CmContainer({
+    Key? key,
+    required this.child,
+    this.color = Colors.transparent,
+    this.paddingAll = 0,
+    this.paddingStart = 0,
+    this.paddingEnd = 0,
+    this.paddingBottom = 0,
+    this.paddingTop = 0,
+    this.marginAll = 0,
+    this.marginStart = 0,
+    this.marginEnd = 0,
+    this.marginBottom = 0,
+    this.marginTop = 0,
+    this.borderColor = Colors.transparent,
+    this.borderWidthAll = 0,
+    this.borderWidthTop = 0,
+    this.borderWidthBottom = 0,
+    this.borderWidthStart = 0,
+    this.borderWidthEnd = 0,
+    this.borderRadiusAll = 0,
+    this.borderRadiusTopStart = 0,
+    this.borderRadiusTopEnd = 0,
+    this.borderRadiusBottomStart = 0,
+    this.borderRadiusBottomEnd = 0,
+    this.width,
+    this.height,
+    this.boxShadowColor = Colors.transparent,
+    this.spreadRadius = 1,
+    this.blurRadius = 5,
+    this.offset = const Offset(0, 1),
+    this.isClipHardEdge = true,
+    this.maxHeight,
+    this.minHeight,
+    this.maxWidth,
+    this.minWidth
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -93,12 +101,20 @@ class CmContainer extends StatelessWidget {
     bool isBorderRadius = (borderWidthTop == borderWidthBottom) &&
         (borderStart == borderEnd) &&
         (borderStart == borderWidthTop);
+
+
     return Container(
-      clipBehavior: isClipHardEdge?Clip.hardEdge :Clip.none,
+      constraints: BoxConstraints(
+        maxHeight: maxHeight??double.infinity,
+        minHeight: minHeight??0.0,
+        maxWidth: maxWidth??double.infinity,
+        minWidth: minWidth??0.0,
+      ),
+      clipBehavior: isClipHardEdge ? Clip.hardEdge : Clip.none,
       margin: EdgeInsets.fromLTRB(appDir == "ltr" ? marginStart : marginEnd,
           marginTop, appDir == "rtl" ? marginStart : marginEnd, marginBottom),
       padding: EdgeInsets.fromLTRB(
-          appDir == "en" ? paddingStart : paddingEnd,
+          appDir == "ltr" ? paddingStart : paddingEnd,
           paddingTop,
           appDir == "rtl" ? paddingStart : paddingEnd,
           paddingBottom),
@@ -122,7 +138,6 @@ class CmContainer extends StatelessWidget {
             width: borderWidthBottom,
           ),
         ),
-
         borderRadius: isBorderRadius
             ? BorderRadius.only(
                 bottomLeft: Radius.circular(appDir == "ltr"
@@ -140,13 +155,13 @@ class CmContainer extends StatelessWidget {
               )
             : null,
         boxShadow: [
-          if(boxShadowColor!=Colors.transparent)
-          BoxShadow(
-            color: boxShadowColor.withOpacity(0.5),
-            spreadRadius: spreadRadius,
-            blurRadius: blurRadius,
-            offset: offset, // changes position of shadow
-          ),
+          if (boxShadowColor != Colors.transparent)
+            BoxShadow(
+              color: boxShadowColor.withOpacity(0.5),
+              spreadRadius: spreadRadius,
+              blurRadius: blurRadius,
+              offset: offset, // changes position of shadow
+            ),
         ],
       ),
       width: width,
