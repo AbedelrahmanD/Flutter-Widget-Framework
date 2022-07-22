@@ -24,8 +24,8 @@ class CmPositioned extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-        left: appLang == "en" ? start : end,
-        right: appLang == "en" ? end : start,
+        left: appDir == "ltr" ? start : end,
+        right: appDir == "ltr" ? end : start,
         top: top,
         bottom: bottom,
         height: height,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-String appLang = "en";
+String appDir = "ltr";
 const Color primaryColor = Colors.deepPurple;
 final Map<int, Color> primaryColorMap = {
   50: primaryColor,

@@ -87,20 +87,20 @@ class CmContainer extends StatelessWidget {
       borderWidthTop = borderWidthBottom =
           borderWidthStart = borderWidthEnd = borderWidthAll;
     }
-    double borderStart = appLang == "en" ? borderWidthStart : borderWidthEnd;
-    double borderEnd = appLang == "en" ? borderWidthEnd : borderWidthStart;
+    double borderStart = appDir == "ltr" ? borderWidthStart : borderWidthEnd;
+    double borderEnd = appDir == "ltr" ? borderWidthEnd : borderWidthStart;
 
     bool isBorderRadius = (borderWidthTop == borderWidthBottom) &&
         (borderStart == borderEnd) &&
         (borderStart == borderWidthTop);
     return Container(
       clipBehavior: isClipHardEdge?Clip.hardEdge :Clip.none,
-      margin: EdgeInsets.fromLTRB(appLang == "en" ? marginStart : marginEnd,
-          marginTop, appLang == "ar" ? marginStart : marginEnd, marginBottom),
+      margin: EdgeInsets.fromLTRB(appDir == "ltr" ? marginStart : marginEnd,
+          marginTop, appDir == "rtl" ? marginStart : marginEnd, marginBottom),
       padding: EdgeInsets.fromLTRB(
-          appLang == "en" ? paddingStart : paddingEnd,
+          appDir == "en" ? paddingStart : paddingEnd,
           paddingTop,
-          appLang == "ar" ? paddingStart : paddingEnd,
+          appDir == "rtl" ? paddingStart : paddingEnd,
           paddingBottom),
       decoration: BoxDecoration(
         color: color,
@@ -125,16 +125,16 @@ class CmContainer extends StatelessWidget {
 
         borderRadius: isBorderRadius
             ? BorderRadius.only(
-                bottomLeft: Radius.circular(appLang == "en"
+                bottomLeft: Radius.circular(appDir == "ltr"
                     ? borderRadiusBottomStart
                     : borderRadiusBottomEnd),
-                bottomRight: Radius.circular(appLang == "en"
+                bottomRight: Radius.circular(appDir == "ltr"
                     ? borderRadiusBottomEnd
                     : borderRadiusBottomStart),
-                topLeft: Radius.circular(appLang == "en"
+                topLeft: Radius.circular(appDir == "ltr"
                     ? borderRadiusTopStart
                     : borderRadiusTopEnd),
-                topRight: Radius.circular(appLang == "en"
+                topRight: Radius.circular(appDir == "ltr"
                     ? borderRadiusTopEnd
                     : borderRadiusTopStart),
               )

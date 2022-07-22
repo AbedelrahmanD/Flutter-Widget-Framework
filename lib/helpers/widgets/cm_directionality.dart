@@ -9,7 +9,7 @@ class CmDirectionality extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-        textDirection: appLang == "en" ? TextDirection.ltr : TextDirection.rtl,
+        textDirection: appDir == "ltr" ? TextDirection.ltr : TextDirection.rtl,
         child: child);
   }
 }
