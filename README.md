@@ -136,4 +136,6 @@ const Widget cmCachedNetworkImagePlaceholder=CircularProgressIndicator();
 const String textFontFamily="";
 const List<String> textFontFamilyFallback=["Droid.Arabic.Kufi"];
 ```
-<h1>Install the project to check other classes like <code>CmDropDown</code>, <code>CmCachedNetworkImage</code>...</h1>
+<h1>Installation</h1>
+<p>Install the project, then copy the <b>helpers</b> folder into your own project and check the dependencies in <code>pubspec.yaml</code></p> and you are ready to go
+<p>Install the project to check other classes like <code>CmDropDown</code>, <code>CmCachedNetworkImage</code>...</p>
