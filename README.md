@@ -136,4 +136,4 @@ const Widget cmCachedNetworkImagePlaceholder=CircularProgressIndicator();
 const String textFontFamily="";
 const List<String> textFontFamilyFallback=["Droid.Arabic.Kufi"];
 ```
-<h1>Install the project to check the other classes like <code>CmDropDown</code>, <code>CmCachedNetworkImage</code>...</h1>
+<h1>Install the project to check other classes like <code>CmDropDown</code>, <code>CmCachedNetworkImage</code>...</h1>
