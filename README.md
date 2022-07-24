@@ -18,7 +18,7 @@ These custome widgets contains:
 </ul>
 </p>
 
-<h1>Comparision Bwteen Flutter Widgets and Custom Widgets</h1>
+<h1>Comparison Bwteen Flutter Widgets and Custom Widgets</h1>
 <h3>Flutter Widgets</h3>
 
 ```
