@@ -54,7 +54,8 @@ These custome widgets contains:
                   ),
                 ),
               ),
-              
+  ```
+  
 <h3>Custom Widgets</h3>              
 
 ```
