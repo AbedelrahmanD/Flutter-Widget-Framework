@@ -17,6 +17,7 @@ class CmExtendedImage extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: [
+
               CmContainer(
                 width: Get.width,
                 borderColor: Colors.grey,
