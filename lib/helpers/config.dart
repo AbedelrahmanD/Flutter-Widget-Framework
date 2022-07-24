@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-String appDir = "ltr";
+import 'package:get/get.dart';
+var appDir = "ltr".obs;
 const Color primaryColor = Colors.deepPurple;
 final Map<int, Color> primaryColorMap = {
   50: primaryColor,
@@ -42,3 +43,7 @@ const double cmButtonMarginBottom = 10;
 
 ///***CmCachedNetworkImage
 const Widget cmCachedNetworkImagePlaceholder=CircularProgressIndicator();
+
+///***fontFamily
+const String textFontFamily="";
+const List<String> textFontFamilyFallback=["Droid.Arabic.Kufi"];

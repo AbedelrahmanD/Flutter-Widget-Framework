@@ -4,18 +4,19 @@ import 'cm_container.dart';
 import '../config.dart';
 
 // ignore: must_be_immutable
-class CmTextField extends StatelessWidget {
+class CmTextField extends StatefulWidget {
   final String hintText;
   final Color hintTextColor;
   final String? labelText;
   final Color labelTextColor;
   final Color inputColor;
   final Color borderColor;
+  final Color focusBorderColor;
   final double borderRadius;
   final String? error;
   TextEditingController? controller;
   IconData? iconData;
-  final bool obscureText;
+  bool obscureText;
   dynamic filter;
   int minLines;
   int maxLines;
@@ -27,9 +28,17 @@ class CmTextField extends StatelessWidget {
   final bool readOnly;
   final VoidCallback? onTap;
   IconData? suffixIconData;
+  final VoidCallback? onSuffixIconTap;
   final FocusNode? focusNode;
   final void Function(String)? onChanged;
   bool autofocus;
+  bool isUnderLineBorder;
+  final String fontFamily;
+  final List<String> fontFamilyFallBack;
+  final double fontSize;
+  final FontStyle fontStyle;
+  final FontWeight fontWeight;
+   String type;
 
   CmTextField({
     Key? key,
@@ -39,6 +48,7 @@ class CmTextField extends StatelessWidget {
     this.labelTextColor = cmTextFieldLabelTextColor,
     this.inputColor = cmTextFieldInputColor,
     this.borderColor = cmTextFieldBorderColor,
+    this.focusBorderColor = cmTextFieldFocusBorderColor,
     this.borderRadius = cmTextFieldBorderRadius,
     this.error,
     this.controller,
@@ -55,72 +65,133 @@ class CmTextField extends StatelessWidget {
     this.readOnly = false,
     this.onTap,
     this.suffixIconData,
+    this.onSuffixIconTap,
     this.onChanged,
     this.focusNode,
-    this.autofocus=false,
+    this.autofocus = false,
+    this.isUnderLineBorder = false,
+    this.fontFamily = textFontFamily,
+    this.fontFamilyFallBack = textFontFamilyFallback,
+    this.fontSize = 16,
+    this.fontWeight = FontWeight.normal,
+    this.fontStyle = FontStyle.normal,
+    this.type = "text",
   }) : super(key: key);
 
   @override
+  State<CmTextField> createState() => _CmTextFieldState();
+}
+
+class _CmTextFieldState extends State<CmTextField> {
+  @override
   Widget build(BuildContext context) {
+    dynamic errorBorder;
+    dynamic border;
+    dynamic focusBorder;
+    dynamic disabledBorder;
+    if (widget.isUnderLineBorder) {
+      errorBorder = UnderlineInputBorder(
+        borderSide: const BorderSide(color: Colors.red, width: 1.0),
+        borderRadius: BorderRadius.circular(widget.borderRadius),
+      );
+      border = UnderlineInputBorder(
+        borderSide: BorderSide(color: widget.borderColor, width: 1.0),
+        borderRadius: BorderRadius.circular(widget.borderRadius),
+      );
+      focusBorder = UnderlineInputBorder(
+        borderSide: BorderSide(color: widget.focusBorderColor, width: 1.0),
+        borderRadius: BorderRadius.circular(widget.borderRadius),
+      );
+      disabledBorder = UnderlineInputBorder(
+        borderSide: BorderSide(color: widget.inputColor, width: 0.0),
+        borderRadius: BorderRadius.circular(widget.borderRadius),
+      );
+    } else {
+      errorBorder = OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.red, width: 1.0),
+        borderRadius: BorderRadius.circular(widget.borderRadius),
+      );
+      border = OutlineInputBorder(
+        borderSide: BorderSide(color: widget.borderColor, width: 1.0),
+        borderRadius: BorderRadius.circular(widget.borderRadius),
+      );
+      focusBorder = OutlineInputBorder(
+        borderSide: BorderSide(color: widget.focusBorderColor, width: 1.0),
+        borderRadius: BorderRadius.circular(widget.borderRadius),
+      );
+      disabledBorder = OutlineInputBorder(
+        borderSide: BorderSide(color: widget.inputColor, width: 0.0),
+        borderRadius: BorderRadius.circular(widget.borderRadius),
+      );
+    }
+    if (widget.type == "password") {
+      widget.suffixIconData = Icons.remove_red_eye;
+    }else
+    if (widget.type == "email") {
+      widget.filter = FilteringTextInputFormatter.deny(RegExp('[ ]'));
+    }
     return CmContainer(
       isClipHardEdge: false,
-      width: width,
-      marginTop: marginTop,
-      marginBottom:marginBottom,
+      width: widget.width,
+      marginTop: widget.marginTop,
+      marginBottom: widget.marginBottom,
       child: TextField(
-        autofocus: autofocus,
-        focusNode:focusNode,
-        onChanged:onChanged,
-        onTap: onTap,
-        readOnly: readOnly,
-        enabled: enabled,
-        minLines: minLines,
-        maxLines: maxLines,
-        obscureText: obscureText,
-        controller: controller,
-        keyboardType: keyboardType,
+        autofocus: widget.autofocus,
+        focusNode: widget.focusNode,
+        onChanged: widget.onChanged,
+        onTap: widget.onTap,
+        readOnly: widget.readOnly,
+        enabled: widget.enabled,
+        minLines: widget.minLines,
+        maxLines: widget.maxLines,
+        obscureText: widget.obscureText,
+        controller: widget.controller,
+        keyboardType: widget.keyboardType,
         inputFormatters: [
-          filter ?? FilteringTextInputFormatter.deny(RegExp('[]')),
+          widget.filter ?? FilteringTextInputFormatter.deny(RegExp('[]')),
         ],
+        style: TextStyle(
+          fontFamily: widget.fontFamily,
+          fontFamilyFallback: widget.fontFamilyFallBack,
+          fontSize: widget.fontSize,
+          fontStyle: widget.fontStyle,
+          fontWeight: widget.fontWeight,
+        ),
         decoration: InputDecoration(
           prefixIcon: Icon(
-            iconData,
+            widget.iconData,
             color: cmTextFieldIconColor,
           ),
-          suffixIcon: Icon(
-            suffixIconData,
-            color: cmTextFieldIconColor,
+          suffixIcon: InkWell(
+            borderRadius: BorderRadius.circular(100),
+            onTap: (){
+              if( widget.onSuffixIconTap!=null){
+                widget.onSuffixIconTap!();
+              }
+              if(widget.type=="password"){
+                setState((){
+                  widget.obscureText=!widget.obscureText;
+                });
+              }
+            },
+            child: Icon(
+              widget.suffixIconData,
+              color: cmTextFieldIconColor,
+            ),
           ),
-          hintText: hintText,
-          hintStyle: TextStyle(color: hintTextColor),
-          labelText: labelText,
-          labelStyle: TextStyle(color: labelTextColor),
-          fillColor: inputColor,
+          hintText: widget.hintText,
+          hintStyle: TextStyle(color: widget.hintTextColor),
+          labelText: widget.labelText,
+          labelStyle: TextStyle(color: widget.labelTextColor),
+          fillColor: widget.inputColor,
           filled: true,
-          errorText: error,
+          errorText: widget.error,
           errorMaxLines: 3,
-          focusedErrorBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.red, width: 1.0),
-            borderRadius: BorderRadius.circular(borderRadius),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.red, width: 1.0),
-            borderRadius: BorderRadius.circular(borderRadius),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: borderColor, width: 1.0),
-            borderRadius: BorderRadius.circular(borderRadius),
-          ),
-
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-                color: cmTextFieldFocusBorderColor, width: 1.0),
-            borderRadius: BorderRadius.circular(borderRadius),
-          ),
-          disabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: inputColor, width: 0.0),
-            borderRadius: BorderRadius.circular(borderRadius),
-          ),
+          focusedErrorBorder: errorBorder,
+          errorBorder: errorBorder,
+          enabledBorder: border,
+          focusedBorder: focusBorder,
+          disabledBorder: disabledBorder,
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../config.dart';
 
 class CmDirectionality extends StatelessWidget {
@@ -8,8 +9,8 @@ class CmDirectionality extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-        textDirection: appDir == "ltr" ? TextDirection.ltr : TextDirection.rtl,
-        child: child);
+    return Obx(()=>Directionality(
+        textDirection: appDir.value == "ltr" ? TextDirection.ltr : TextDirection.rtl,
+        child: child));
   }
 }

@@ -30,7 +30,8 @@ class Connector extends GetConnect {
         body: options["body"], contentType: options["contentType"]).timeout(
         const Duration(seconds: connectionTimeout),
         onTimeout: () => const Response(statusText: "Timeout", statusCode: 408));
-
+    debugPrint(
+        "url============= $url");
         debugPrint(
         "isSuccessStatusCode============= ${isSuccess(response.statusCode)}");
     debugPrint("statusCode============= ${response.statusCode}");

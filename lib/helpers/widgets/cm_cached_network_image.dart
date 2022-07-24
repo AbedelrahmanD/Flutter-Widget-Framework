@@ -2,9 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../config.dart';
 import 'cm_extended_image.dart';
 import 'package:get/get.dart';
+import '../config.dart';
+
 class CmCachedNetworkImage extends StatelessWidget {
   final String url;
   final double? width;
@@ -20,7 +21,7 @@ class CmCachedNetworkImage extends StatelessWidget {
       this.height,
       this.fit,
       this.placeholder = cmCachedNetworkImagePlaceholder,
-      this.openOnTap=true,})
+      this.openOnTap=false,})
       : super(key: key);
 
   @override

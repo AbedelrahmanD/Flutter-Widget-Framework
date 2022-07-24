@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../config.dart';
 // ignore: must_be_immutable
 class CmContainer extends StatelessWidget {
@@ -72,7 +73,7 @@ class CmContainer extends StatelessWidget {
     this.spreadRadius = 1,
     this.blurRadius = 5,
     this.offset = const Offset(0, 1),
-    this.isClipHardEdge = true,
+    this.isClipHardEdge = false,
     this.maxHeight,
     this.minHeight,
     this.maxWidth,
@@ -95,15 +96,15 @@ class CmContainer extends StatelessWidget {
       borderWidthTop = borderWidthBottom =
           borderWidthStart = borderWidthEnd = borderWidthAll;
     }
-    double borderStart = appDir == "ltr" ? borderWidthStart : borderWidthEnd;
-    double borderEnd = appDir == "ltr" ? borderWidthEnd : borderWidthStart;
+    double borderStart = appDir.value == "ltr" ? borderWidthStart : borderWidthEnd;
+    double borderEnd = appDir.value == "ltr" ? borderWidthEnd : borderWidthStart;
 
     bool isBorderRadius = (borderWidthTop == borderWidthBottom) &&
         (borderStart == borderEnd) &&
         (borderStart == borderWidthTop);
 
 
-    return Container(
+    return Obx(()=> Container(
       constraints: BoxConstraints(
         maxHeight: maxHeight??double.infinity,
         minHeight: minHeight??0.0,
@@ -111,12 +112,12 @@ class CmContainer extends StatelessWidget {
         minWidth: minWidth??0.0,
       ),
       clipBehavior: isClipHardEdge ? Clip.hardEdge : Clip.none,
-      margin: EdgeInsets.fromLTRB(appDir == "ltr" ? marginStart : marginEnd,
-          marginTop, appDir == "rtl" ? marginStart : marginEnd, marginBottom),
+      margin: EdgeInsets.fromLTRB(appDir.value == "ltr" ? marginStart : marginEnd,
+          marginTop, appDir.value == "rtl" ? marginStart : marginEnd, marginBottom),
       padding: EdgeInsets.fromLTRB(
-          appDir == "ltr" ? paddingStart : paddingEnd,
+          appDir.value == "ltr" ? paddingStart : paddingEnd,
           paddingTop,
-          appDir == "rtl" ? paddingStart : paddingEnd,
+          appDir.value == "rtl" ? paddingStart : paddingEnd,
           paddingBottom),
       decoration: BoxDecoration(
         color: color,
@@ -140,19 +141,19 @@ class CmContainer extends StatelessWidget {
         ),
         borderRadius: isBorderRadius
             ? BorderRadius.only(
-                bottomLeft: Radius.circular(appDir == "ltr"
-                    ? borderRadiusBottomStart
-                    : borderRadiusBottomEnd),
-                bottomRight: Radius.circular(appDir == "ltr"
-                    ? borderRadiusBottomEnd
-                    : borderRadiusBottomStart),
-                topLeft: Radius.circular(appDir == "ltr"
-                    ? borderRadiusTopStart
-                    : borderRadiusTopEnd),
-                topRight: Radius.circular(appDir == "ltr"
-                    ? borderRadiusTopEnd
-                    : borderRadiusTopStart),
-              )
+          bottomLeft: Radius.circular(appDir.value == "ltr"
+              ? borderRadiusBottomStart
+              : borderRadiusBottomEnd),
+          bottomRight: Radius.circular(appDir.value == "ltr"
+              ? borderRadiusBottomEnd
+              : borderRadiusBottomStart),
+          topLeft: Radius.circular(appDir.value == "ltr"
+              ? borderRadiusTopStart
+              : borderRadiusTopEnd),
+          topRight: Radius.circular(appDir.value == "ltr"
+              ? borderRadiusTopEnd
+              : borderRadiusTopStart),
+        )
             : null,
         boxShadow: [
           if (boxShadowColor != Colors.transparent)
@@ -167,6 +168,6 @@ class CmContainer extends StatelessWidget {
       width: width,
       height: height,
       child: child,
-    );
+    ));
   }
 }

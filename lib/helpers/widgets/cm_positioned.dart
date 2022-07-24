@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../config.dart';
 
 class CmPositioned extends StatelessWidget {
@@ -23,13 +24,13 @@ class CmPositioned extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-        left: appDir == "ltr" ? start : end,
-        right: appDir == "ltr" ? end : start,
-        top: top,
-        bottom: bottom,
-        height: height,
-        width: width,
-        child: child);
+    return Obx(()=>Positioned(
+      left: appDir.value == "ltr" ? start : end,
+      right: appDir.value == "ltr" ? end : start,
+      top: top,
+      bottom: bottom,
+      height: height,
+      width: width,
+      child: child,));
   }
 }
