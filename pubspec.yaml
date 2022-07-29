@@ -33,7 +33,8 @@ dependencies:
   get_storage: ^2.0.3
   connectivity_plus: ^2.3.5
   cached_network_image: ^3.2.1
-  extended_image: ^6.2.1  
+  extended_image: ^6.2.1
+
 
 
 
