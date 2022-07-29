@@ -25,13 +25,17 @@ class CmTextField extends StatefulWidget {
   final double marginTop;
   final double marginBottom;
   final double? width;
+  final double? height;
   final bool readOnly;
   final VoidCallback? onTap;
   IconData? suffixIconData;
   final VoidCallback? onSuffixIconTap;
   final FocusNode? focusNode;
   final void Function(String)? onChanged;
+  final VoidCallback? onEditingComplete;
   bool autofocus;
+  final double scrollPadding;
+  final TextInputAction textInputAction;
   bool isUnderLineBorder;
   final String fontFamily;
   final List<String> fontFamilyFallBack;
@@ -59,16 +63,20 @@ class CmTextField extends StatefulWidget {
     this.maxLines = 1,
     this.keyboardType = TextInputType.text,
     this.enabled = true,
-    this.marginTop = cmButtonMarginTop,
-    this.marginBottom = cmButtonMarginBottom,
+    this.marginTop = cmTextFieldMarginTop,
+    this.marginBottom = cmTextFieldMarginBottom,
     this.width = cmTextFieldWidth,
+    this.height=cmTextFieldHeight,
     this.readOnly = false,
     this.onTap,
     this.suffixIconData,
     this.onSuffixIconTap,
     this.onChanged,
+    this.onEditingComplete,
     this.focusNode,
     this.autofocus = false,
+    this.scrollPadding=cmTextFieldScrollPadding,
+    this.textInputAction=TextInputAction.next,
     this.isUnderLineBorder = false,
     this.fontFamily = textFontFamily,
     this.fontFamilyFallBack = textFontFamilyFallback,
@@ -133,12 +141,17 @@ class _CmTextFieldState extends State<CmTextField> {
     return CmContainer(
       isClipHardEdge: false,
       width: widget.width,
+      height: 70,
       marginTop: widget.marginTop,
       marginBottom: widget.marginBottom,
       child: TextField(
+
+        textInputAction: widget.textInputAction,
+        scrollPadding:EdgeInsets.only(bottom: widget.scrollPadding) ,
         autofocus: widget.autofocus,
         focusNode: widget.focusNode,
         onChanged: widget.onChanged,
+        onEditingComplete: widget.onEditingComplete,
         onTap: widget.onTap,
         readOnly: widget.readOnly,
         enabled: widget.enabled,
@@ -151,18 +164,22 @@ class _CmTextFieldState extends State<CmTextField> {
           widget.filter ?? FilteringTextInputFormatter.deny(RegExp('[]')),
         ],
         style: TextStyle(
+
           fontFamily: widget.fontFamily,
           fontFamilyFallback: widget.fontFamilyFallBack,
           fontSize: widget.fontSize,
           fontStyle: widget.fontStyle,
           fontWeight: widget.fontWeight,
         ),
+
         decoration: InputDecoration(
+
           prefixIcon: Icon(
             widget.iconData,
             color: cmTextFieldIconColor,
           ),
-          suffixIcon: InkWell(
+          suffixIcon:widget.suffixIconData != null
+              ? InkWell(
             borderRadius: BorderRadius.circular(100),
             onTap: (){
               if( widget.onSuffixIconTap!=null){
@@ -178,7 +195,8 @@ class _CmTextFieldState extends State<CmTextField> {
               widget.suffixIconData,
               color: cmTextFieldIconColor,
             ),
-          ),
+          )
+          :null,
           hintText: widget.hintText,
           hintStyle: TextStyle(color: widget.hintTextColor),
           labelText: widget.labelText,

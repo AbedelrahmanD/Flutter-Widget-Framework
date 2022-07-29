@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_framework/helpers/widgets/cm_container.dart';
 import 'package:flutter_widget_framework/helpers/widgets/cm_text_field.dart';
-import 'package:get/get.dart';
 class Compare extends StatefulWidget {
   const Compare({Key? key}) : super(key: key);
 

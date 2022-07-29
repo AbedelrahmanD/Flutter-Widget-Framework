@@ -23,7 +23,7 @@ packages:
     source: hosted
     version: "2.1.0"
   cached_network_image:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: cached_network_image
       url: "https://pub.dartlang.org"
@@ -72,7 +72,7 @@ packages:
     source: hosted
     version: "1.16.0"
   connectivity_plus:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: connectivity_plus
       url: "https://pub.dartlang.org"
@@ -120,13 +120,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.2"
-  cupertino_icons:
-    dependency: "direct main"
-    description:
-      name: cupertino_icons
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.5"
   dbus:
     dependency: transitive
     description:
@@ -135,7 +128,7 @@ packages:
     source: hosted
     version: "0.7.6"
   extended_image:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: extended_image
       url: "https://pub.dartlang.org"
@@ -206,14 +199,14 @@ packages:
     source: sdk
     version: "0.0.0"
   get:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: get
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.6.5"
   get_storage:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: get_storage
       url: "https://pub.dartlang.org"

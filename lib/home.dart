@@ -87,6 +87,7 @@ class _HomeState extends State<Home> {
                   iconData: Icons.person,
                   hintText: "Enter Your Name",
                   labelText: "Name",
+
                 ),
                 CmTextField(
                   iconData: Icons.lock,

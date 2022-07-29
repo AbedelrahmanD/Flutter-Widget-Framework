@@ -25,8 +25,10 @@ const Color cmTextFieldFocusBorderColor = primaryColor;
 const Color cmTextFieldIconColor = primaryColor;
 const double cmTextFieldBorderRadius = 100;
 const double cmTextFieldWidth = 300;
+const double cmTextFieldHeight = 70;
 const double cmTextFieldMarginTop = 10;
 const double cmTextFieldMarginBottom = 10;
+const double cmTextFieldScrollPadding = 120;
 
 
 ///***CmButton
@@ -47,3 +49,7 @@ const Widget cmCachedNetworkImagePlaceholder=CircularProgressIndicator();
 ///***fontFamily
 const String textFontFamily="";
 const List<String> textFontFamilyFallback=["Droid.Arabic.Kufi"];
+
+
+const double widthSmallScreen=600;
+const double widthMidScreen=1000;

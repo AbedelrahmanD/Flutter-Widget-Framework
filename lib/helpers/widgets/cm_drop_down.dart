@@ -313,6 +313,7 @@ class CmDropDownState extends State<CmDropDown> {
       onTap: () => openDialog(),
       labelText: "Dropdown",
       suffixIconData: Icons.arrow_drop_down,
+      onSuffixIconTap: () => openDialog(),
       focusNode: widget.focusNode,
       isUnderLineBorder: widget.isUnderLineBorder
     );
