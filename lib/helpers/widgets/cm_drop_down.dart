@@ -202,29 +202,31 @@ class CmDropDownState extends State<CmDropDown> {
                                   height: Get.height * 0.7,
 
                                  
-                                  child: Scrollbar(
-                                    child: SingleChildScrollView(
-                                      child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            if (widget.showSpinner)
-                                              Center(
-                                                child: CmContainer(
-                                                    paddingAll: 5,
-                                                    child: CircularProgressIndicator(
-                                                      color: widget.spinnerColor,
-                                                      backgroundColor:
-                                                          widget.spinnerBackground,
-                                                    )),
-                                              ),
-                                            for (dynamic option in options)
-                                              InkWell(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      if (widget.showSpinner)
+                                        Center(
+                                          child: CmContainer(
+                                              paddingAll: 5,
+                                              child: CircularProgressIndicator(
+                                                color: widget.spinnerColor,
+                                                backgroundColor:
+                                                widget.spinnerBackground,
+                                              )),
+                                        ),
+                                      Flexible(
+                                        child: ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: options.length,
+                                            itemBuilder: (dynamic context,int index){
+                                              return   InkWell(
                                                 onTap: () {
                                                   widget.controller.text =
-                                                      option[widget.optionText];
+                                                  options[index][widget.optionText];
                                                   widget
-                                                      .onSelect!(jsonEncode(option));
+                                                      .onSelect!(jsonEncode(options[index]));
                                                   Get.back();
                                                 },
                                                 child: CmContainer(
@@ -233,21 +235,46 @@ class CmDropDownState extends State<CmDropDown> {
                                                     borderWidthBottom: 1,
                                                     borderColor: Colors.grey,
                                                     color: widget.controller.text ==
-                                                            option[widget.optionText]
+                                                        options[index][widget.optionText]
                                                         ? widget.selectedColor
-                                                            .withOpacity(0.5)
+                                                        .withOpacity(0.5)
                                                         : Colors.white,
                                                     child: CmText(
-                                                        text: option[
-                                                            widget.optionText])),
-                                              ),
+                                                        text: options[index][
+                                                        widget.optionText])),
+                                              );
 
-                                            if(options.isEmpty && widget.showSpinner==false)
-                                              Center(child: CmText(text: widget.noOptionsText,fontWeight: FontWeight.bold,)),
 
-                                          ],
-                                        ),
-                                    ),
+                                            }),
+                                      ),
+                                      // for (dynamic option in options)
+                                      //   InkWell(
+                                      //     onTap: () {
+                                      //       widget.controller.text =
+                                      //           option[widget.optionText];
+                                      //       widget
+                                      //           .onSelect!(jsonEncode(option));
+                                      //       Get.back();
+                                      //     },
+                                      //     child: CmContainer(
+                                      //         width: Get.width,
+                                      //         paddingAll: 15,
+                                      //         borderWidthBottom: 1,
+                                      //         borderColor: Colors.grey,
+                                      //         color: widget.controller.text ==
+                                      //                 option[widget.optionText]
+                                      //             ? widget.selectedColor
+                                      //                 .withOpacity(0.5)
+                                      //             : Colors.white,
+                                      //         child: CmText(
+                                      //             text: option[
+                                      //                 widget.optionText])),
+                                      //   ),
+
+                                      if(options.isEmpty && widget.showSpinner==false)
+                                        Center(child: CmText(text: widget.noOptionsText,fontWeight: FontWeight.bold,)),
+
+                                    ],
                                   ),
                                 )),
                           )

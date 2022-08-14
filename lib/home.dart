@@ -46,12 +46,18 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    dynamic map={"name":"formdata from flutter"};
+    // FormData formdata = FormData(map);
+    // Connector()
+    //     .sendRequest(url: "http://192.168.0.122/php/api/",body: formdata);
   }
 
   @override
   Widget build(BuildContext context) {
     return CmDirectionality(
       child: Scaffold(
+
+        
         appBar: AppBar(
           title:   const CmText(
             text: "Custom Widgets",
